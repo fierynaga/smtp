@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <sstream>
 
 void error(const char *msg)
 {
@@ -99,14 +100,16 @@ continuously communicate with the server
         if (connect(sockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
             error("ERROR connecting");
 
+	
+
+	//
+        //prompt the user for message
         //
-        //prompt the user for a message
-        //
-        printf("Please enter the message: ");
+        printf("Please the enter message");
         bzero(buffer,256);
         
         //
-        //put the message into the buffer
+        //put the address into the buffer
         //
         fgets(buffer,255,stdin);
         
@@ -118,6 +121,7 @@ continuously communicate with the server
         if (n < 0)
              error("ERROR writing to socket");
              
+	
         //clear the buffer
         bzero(buffer,256);
         
@@ -129,6 +133,11 @@ continuously communicate with the server
         // after receiving message from server
         // check for error/success codes
         //
+	std::string str;
+	str = buffer;
+
+	if( str.find("500"))
+		error("command error syntax");
 
         if (n < 0)
              error("ERROR reading from socket");
